@@ -1,25 +1,38 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { UserTypeProvider } from './UserTypeContext.js';
+import {NotificationProvider} from './pages/NotificationManager.js';
+import PaginaInicial from './pages/paginainicial/PaginaInicial.js';
+import Menu from './pages/menu/Menu.js'
+import Dicas from './pages/dicas/Dicas.js'
+import SiteChecker from './pages/sitechecker/SiteChecker.js';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+
+    <Router>
+      <Menu/>
+      <NotificationProvider>
+      <div className="App">
+        <Routes>
+          <Route path='/' element={<PaginaInicial />}></Route>
+          <Route path='/dicas' element={<Dicas />}></Route>
+          <Route path='/siteChecker' element={<SiteChecker />}></Route>
+
+        </Routes>
+      </div>
+      </NotificationProvider>
+    </Router>
+
   );
 }
 
-export default App;
+const Root = () => (
+  <UserTypeProvider>
+    <App />
+  </UserTypeProvider>
+);
+
+
+export default Root;
