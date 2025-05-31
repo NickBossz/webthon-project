@@ -39,9 +39,9 @@
 .title {
   font-family: 'Courier New', monospace;
   color: #00ff00;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   text-align: center;
-  text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
+  text-shadow: 0 0 5px #00ff00, 0 0 15px #00ff00;
 }
 
 .input {
@@ -69,25 +69,181 @@
   color: #00ff00;
   border-radius: 0.5rem;
   cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
 .button:hover {
   background: rgba(0, 255, 0, 0.1);
   transform: translateY(-2px);
+  box-shadow: 0 0 10px #00ff00;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .text {
   font-family: 'Courier New', monospace;
   font-size: 1rem;
   text-align: center;
-  color: #00ff00;
+  margin-top: 1rem;
+  text-shadow: 0 0 5px #00ff00;
 }
 
+/* ====== STATUS COLORS ====== */
 .safe {
-  color: #00ff00;
+  color: #22c55e; /* verde limão */
+  text-shadow: 0 0 5px #22c55e, 0 0 15px #22c55e;
 }
 
-.unsafe {
-  color: red;
+.suspicious {
+  color: #eab308; /* amarelo escuro */
+  text-shadow: 0 0 5px #eab308, 0 0 15px #eab308;
+}
+
+.potentially-dangerous {
+  color: #f97316; /* laranja forte */
+  text-shadow: 0 0 5px #f97316, 0 0 15px #f97316;
+}
+
+.dangerous {
+  color: #dc2626; /* vermelho intenso */
+  text-shadow: 0 0 5px #dc2626, 0 0 15px #dc2626;
+}
+
+.error {
+  color: #9ca3af; /* cinza claro */
+  text-shadow: 0 0 5px #9ca3af;
+}
+
+/* Botão "Como funciona?" com margem separada */
+.infoButton {
+  margin-top: 1rem;
+}
+
+/* ===== Modal ===== */
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  cursor: pointer;
+}
+
+.modalContent {
+  background: black;
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  box-sizing: border-box;
+  border: 3px solid #00ff00;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  cursor: default;
+  box-shadow: 0 0 30px #00ff00;
+  text-align: left;
+  position: relative;
+}
+
+/* Animações do modal */
+@keyframes fadeInAnim {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOutAnim {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes slideInAnim {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideOutAnim {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(30px); opacity: 0; }
+}
+
+.fadeIn {
+  animation: fadeInAnim 0.3s forwards;
+}
+
+.fadeOut {
+  animation: fadeOutAnim 0.3s forwards;
+}
+
+.slideIn {
+  animation: slideInAnim 0.3s forwards;
+}
+
+.slideOut {
+  animation: slideOutAnim 0.3s forwards;
+}
+
+/* Modal cores dinâmicas para o conteúdo */
+.modalSafe {
+  border-color: #22c55e; /* verde limão */
+  color: #22c55e;
+  box-shadow: 0 0 20px #22c55e;
+}
+
+.modalSuspicious {
+  border-color: #eab308; /* amarelo escuro */
+  color: #eab308;
+  box-shadow: 0 0 20px #eab308;
+}
+
+.modalPotentiallyDangerous {
+  border-color: #f97316; /* laranja forte */
+  color: #f97316;
+  box-shadow: 0 0 20px #f97316;
+}
+
+.modalDangerous {
+  border-color: #dc2626; /* vermelho intenso */
+  color: #dc2626;
+  box-shadow: 0 0 20px #dc2626;
+}
+
+.modalError {
+  border-color: #6b7280; /* cinza */
+  color: #6b7280;
+  box-shadow: 0 0 20px #6b7280;
+}
+
+.modalDefault {
+  border-color: #00ff00; /* verde padrão */
+  color: #00ff00;
+  box-shadow: 0 0 20px #00ff00;
+}
+
+/* Cores para os spans dentro do modal (textos explicativos) */
+.safe {
+  color: #22c55e;
+  font-weight: bold;
+}
+
+.suspicious {
+  color: #eab308;
+  font-weight: bold;
+}
+
+.potentiallyDangerous {
+  color: #f97316;
+  font-weight: bold;
+}
+
+.dangerous {
+  color: #dc2626;
+  font-weight: bold;
 }

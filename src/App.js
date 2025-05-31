@@ -6,6 +6,7 @@ import PaginaInicial from './pages/paginainicial/PaginaInicial.js';
 import Menu from './pages/menu/Menu.js'
 import Dicas from './pages/dicas/Dicas.js'
 import SiteChecker from './pages/sitechecker/SiteChecker.js';
+import Perfil from './pages/perfil/Perfil.js';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path='/' element={<PaginaInicial />}></Route>
           <Route path='/dicas' element={<Dicas />}></Route>
           <Route path='/siteChecker' element={<SiteChecker />}></Route>
+          <Route path='/perfil/:username' element={<Perfil />}></Route>
 
         </Routes>
       </div>
@@ -29,9 +31,11 @@ function App() {
 }
 
 const Root = () => (
-  <UserTypeProvider>
-    <App />
-  </UserTypeProvider>
+  <NotificationProvider>
+    <UserTypeProvider>
+      <App />
+    </UserTypeProvider>
+  </NotificationProvider>
 );
 
 
