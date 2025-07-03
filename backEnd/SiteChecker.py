@@ -5,18 +5,15 @@ from datetime import datetime
 import json
 import sys
 
-# ✅ Verifica se uma URL foi passada como argumento
 if len(sys.argv) < 2:
     print(json.dumps({"error": "URL não fornecida"}))
     sys.exit(1)
 
 url_check = sys.argv[1]
 
-# ✅ Configuração da API do VirusTotal
 API_KEY = "ce7de855a44cd3422f5dc0a490744cb0a9869b83ba30963ee3e4e62158b5306a"
 VIRUSTOTAL_API_URL = "https://www.virustotal.com/api/v3/domains/{}"
 
-# ✅ Domínios para treino
 DOMINIOS_TREINO = [
     "rodapremiada.top",
     "donttbeevils.de",
@@ -75,7 +72,6 @@ def calcular_risco(dados):
     return max(min(risco, 100), 0)
 
 
-# ✅ Treina o modelo
 dados_treino = []
 for dominio in DOMINIOS_TREINO:
     resultado = obter_dados_virustotal(dominio)
@@ -94,7 +90,6 @@ y = df["risco"]
 modelo = LinearRegression()
 modelo.fit(X, y)
 
-# ✅ Coleta dados da URL enviada
 dados_site = obter_dados_virustotal(url_check)
 
 if not dados_site:
@@ -107,5 +102,4 @@ risco_previsto = max(min(risco_previsto, 100), 0)
 
 dados_site["risco_previsto"] = risco_previsto
 
-# ✅ Retorna resultado como JSON no stdout
 print(json.dumps(dados_site))

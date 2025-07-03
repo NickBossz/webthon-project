@@ -1,129 +1,289 @@
-const express = require('express')
-const cors = require('cors')
+const express = require('express');
+const cors = require('cors');
 const { spawn } = require('child_process');
 const { URL } = require('url');
+const { IncomingForm } = require('formidable');
+const axios = require('axios');
+const FormData = require('form-data');
+const crypto = require('crypto');
+const fs = require('fs').promises;
 
-const servidorBackend = express()
-const portaServidorBackend = 8080
+const servidorBackend = express();
+const PORT = 8080;
+const VIRUSTOTAL_API_KEY = process.env.VIRUSTOTAL_API_KEY || "ce7de855a44cd3422f5dc0a490744cb0a9869b83ba30963ee3e4e62158b5306a";
+const VIRUSTOTAL_BASE_URL = 'https://www.virustotal.com/api/v3';
+const AXIOS_CONFIG = {
+  headers: { 'x-apikey': VIRUSTOTAL_API_KEY },
+  maxContentLength: Infinity,
+  maxBodyLength: Infinity,
+  timeout: 15000
+};
 
-const {criarUsuario, coletarUsuarioPeloNome, excluirUsuario, uploadPerfilImage, coletarUsuarios} = require("./CRUDS/CrudUsuarios.js")
+const {
+  criarUsuario,
+  coletarUsuarioPeloNome,
+  excluirUsuario,
+  uploadPerfilImage,
+  coletarUsuarios
+} = require("./CRUDS/CrudUsuarios.js");
 
-
+// Função auxiliar para extrair domínio de URL
 function extrairDominio(urlString) {
   try {
-    // Adiciona protocolo padrão se não tiver
-    if (!urlString.startsWith('http://') && !urlString.startsWith('https://')) {
-      urlString = 'http://' + urlString;
-    }
-
-    const url = new URL(urlString);
-    return url.hostname; // retorna só o domínio, ex: sitechecker.pro
+    if (!urlString.match(/^https?:\/\//)) urlString = 'http://' + urlString;
+    return new URL(urlString).hostname;
   } catch {
     return null;
   }
 }
 
-
+// Função auxiliar para executar script Python
 async function checkSite(url) {
-    return new Promise((resolve, reject) => {
-        const process = spawn('python', ['SiteChecker.py', url]);
+  return new Promise((resolve, reject) => {
+    const process = spawn('python', ['SiteChecker.py', url]);
+    let resultado = '', erro = '';
 
-        let resultado = '';
-        let erro = '';
-
-        process.stdout.on('data', (data) => {
-            resultado += data.toString();
-            console.log(resultado)
-        });
-
-        process.stderr.on('data', (data) => {
-            erro += data.toString();
-        });
-
-        process.on('close', (code) => {
-            if (code !== 0) {
-                reject(new Error(`Erro no Python: ${erro}`));
-                return;
-            }
-
-            try {
-                const json = JSON.parse(resultado);
-                resolve(json);
-            } catch (e) {
-                reject(new Error('Falha ao parsear JSON: ' + e.message));
-            }
-        });
+    process.stdout.on('data', data => resultado += data.toString());
+    process.stderr.on('data', data => erro += data.toString());
+    process.on('close', code => {
+      if (code !== 0) return reject(new Error(`Erro no Python: ${erro}`));
+      try {
+        const json = JSON.parse(resultado);
+        if (json && typeof json.risco_previsto === 'number') {
+          json.risco_previsto = Math.round(json.risco_previsto);
+        }
+        resolve(json);
+      } catch (e) {
+        reject(new Error(`Falha ao parsear JSON: ${e.message}`));
+      }
     });
+  });
 }
 
+// Função auxiliar para parsear formulário
+async function parseForm(req) {
+  const form = new IncomingForm({
+    multiples: false,
+    keepExtensions: true,
+    maxFileSize: 50 * 1024 * 1024
+  });
+  return new Promise((resolve, reject) => {
+    form.parse(req, (err, fields, files) => {
+      if (err) {
+        console.error('Erro no parsing do formulário:', err);
+        reject(new Error(`Erro no parsing do formulário: ${err.message}`));
+      } else {
+        resolve({ fields, files });
+      }
+    });
+  });
+}
 
-servidorBackend.use(express.json({ limit: '50mb' }))
-servidorBackend.use(express.urlencoded({ extended: true, limit: '50mb' }))
-servidorBackend.use(cors({
-    origin: '*',
-    allowedHeaders: '*'
-}))
+// Função auxiliar para tratar erros
+function handleError(error, defaultMessage) {
+  console.error(defaultMessage, {
+    message: error.message,
+    status: error.response?.status,
+    data: error.response?.data,
+    code: error.code
+  });
+  return error.response?.data?.error?.message || error.message || defaultMessage;
+}
 
+// Middleware
+servidorBackend.use(express.json({ limit: '50mb' }));
+servidorBackend.use(express.urlencoded({ extended: true, limit: '50mb' }));
+servidorBackend.use(cors({ origin: '*', allowedHeaders: '*' }));
 
-servidorBackend.listen(portaServidorBackend,() => console.log(`servidor backend rodando em http://localhost:${portaServidorBackend}`))
-
-// --------------- CALCULADORA DE RISCOS DE SITE ---------------
-servidorBackend.post('/check-site', async (req, res) => {
-    const { url } = req.body;
-
-    if (!url) {
-        return res.status(400).json({ error: 'URL não fornecida' });
-    }
-
-    const dominio = extrairDominio(url);
-    if (!dominio) {
-        return res.status(400).json({ error: 'URL inválida' });
-    }
-
-    try {
-        const resultado = await checkSite(dominio);
-
-        if (resultado && typeof resultado.risco_previsto === 'number') {
-            // Arredonda para inteiro e converte para string com '%' se quiser
-            resultado.risco_previsto = Math.round(resultado.risco_previsto);
-        }
-
-        res.status(200).json(resultado);
-    } catch (error) {
-        res.status(500).json({ error: error.toString() });
-    }
+servidorBackend.listen(PORT, () => {
+  console.log(`servidor backend rodando em http://localhost:${PORT}`);
 });
 
+// -------- CHECK-SITE ----------
+servidorBackend.post('/check-site', async (req, res) => {
+  const { url } = req.body;
+  if (!url) return res.status(400).json({ error: 'URL não fornecida' });
 
+  const dominio = extrairDominio(url);
+  if (!dominio) return res.status(400).json({ error: 'URL inválida' });
 
-// -------------- USUARIOS --------------
+  try {
+    const resultado = await checkSite(dominio);
+    res.status(200).json(resultado);
+  } catch (error) {
+    res.status(500).json({ error: handleError(error, 'Erro ao verificar o site') });
+  }
+});
+
+// -------- CHECK-FILE ----------
+servidorBackend.post("/check-file", async (req, res) => {
+  try {
+    const { files } = await parseForm(req);
+    if (!files.file) {
+      console.error('Nenhum arquivo encontrado na requisição');
+      return res.status(400).json({ error: 'Nenhum arquivo enviado.' });
+    }
+
+    const file = Array.isArray(files.file) ? files.file[0] : files.file;
+    console.log('Arquivo recebido:', {
+      originalFilename: file.originalFilename,
+      size: file.size,
+      mimetype: file.mimetype,
+      filepath: file.filepath
+    });
+
+    // Lê o arquivo do caminho temporário
+    let fileBuffer;
+    try {
+      if (!file.filepath) throw new Error('Caminho do arquivo temporário não disponível.');
+      fileBuffer = await fs.readFile(file.filepath);
+      if (!Buffer.isBuffer(fileBuffer)) throw new Error('Arquivo inválido: buffer de dados não disponível.');
+    } catch (err) {
+      console.error('Erro ao ler o arquivo temporário:', err);
+      throw new Error(`Erro ao ler o arquivo: ${err.message}`);
+    }
+
+    // Calcula o hash SHA256
+    const fileHash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
+    console.log('SHA256 do arquivo enviado:', fileHash);
+
+    try {
+      // Envia o arquivo para o VirusTotal
+      const formData = new FormData();
+      formData.append('file', fileBuffer, {
+        filename: file.originalFilename,
+        contentType: file.mimetype
+      });
+
+      console.log('Enviando arquivo para o VirusTotal...');
+      const uploadResponse = await axios.post(
+        `${VIRUSTOTAL_BASE_URL}/files`,
+        formData,
+        { ...AXIOS_CONFIG, headers: { ...AXIOS_CONFIG.headers, ...formData.getHeaders() }, timeout: 60000 }
+      );
+
+      const analysisId = uploadResponse.data.data?.id;
+      if (!analysisId) {
+        console.error('ID de análise não encontrado na resposta:', JSON.stringify(uploadResponse.data, null, 2));
+        throw new Error('Resposta inválida do VirusTotal: ID de análise não encontrado');
+      }
+      console.log('Arquivo enviado, ID da análise:', analysisId);
+
+      // Forçar reanálise
+      console.log('Solicitando reanálise do arquivo...');
+      await axios.post(
+        `${VIRUSTOTAL_BASE_URL}/files/${fileHash}/analyse`,
+        {},
+        AXIOS_CONFIG
+      ).catch(err => {
+        console.warn('Aviso: Reanálise pode não ser necessária ou falhou:', {
+          message: err.message,
+          status: err.response?.status,
+          data: err.response?.data
+        });
+      });
+
+      // Aguarda a análise
+      let attempts = 0;
+      const maxAttempts = 30;
+      const pollInterval = 5000;
+      let analysisResult;
+
+      do {
+        if (attempts >= maxAttempts) {
+          console.error('Tempo limite excedido para análise do VirusTotal');
+          throw new Error('Tempo limite excedido para análise do VirusTotal');
+        }
+
+        await new Promise(resolve => setTimeout(resolve, pollInterval));
+        console.log(`Verificando status da análise (tentativa ${attempts + 1})...`);
+        analysisResult = await axios.get(`${VIRUSTOTAL_BASE_URL}/analyses/${analysisId}`, AXIOS_CONFIG);
+
+        const status = analysisResult.data.data?.attributes?.status;
+        console.log(`Status da análise: ${status}`);
+        attempts++;
+      } while (analysisResult.data.data?.attributes?.status !== 'completed');
+
+      console.log('Resposta da análise:', JSON.stringify(analysisResult.data, null, 2));
+
+      const resultData = analysisResult.data.data;
+      const stats = resultData.attributes?.stats;
+      if (!stats) {
+        console.error('Estatísticas não encontradas na resposta:', JSON.stringify(analysisResult.data, null, 2));
+        throw new Error('Resposta inválida do VirusTotal: estatísticas não disponíveis');
+      }
+
+      const sha256 = analysisResult.data.meta?.file_info?.sha256;
+      if (!sha256) {
+        console.error('SHA256 não encontrado na resposta:', JSON.stringify(analysisResult.data, null, 2));
+        throw new Error('Informações do arquivo não disponíveis na resposta do VirusTotal');
+      }
+
+      if (sha256 !== fileHash) {
+        console.error('Hash retornado pelo VirusTotal não corresponde ao enviado:', { expected: fileHash, received: sha256 });
+        throw new Error('O arquivo analisado pelo VirusTotal não corresponde ao arquivo enviado');
+      }
+
+      res.json({
+        positives: stats.malicious || 0,
+        total: Object.values(stats).reduce((a, b) => a + b, 0),
+        permalink: `https://www.virustotal.com/gui/file/${sha256}/detection`,
+        filename: file.originalFilename
+      });
+    } catch (error) {
+      res.status(500).json({ error: handleError(error, 'Erro ao verificar o arquivo no VirusTotal') });
+    } finally {
+      if (file.filepath) {
+        await fs.unlink(file.filepath).catch(err => console.error('Erro ao remover arquivo temporário:', err));
+      }
+    }
+  } catch (error) {
+    res.status(500).json({ error: handleError(error, 'Erro ao processar o arquivo') });
+  }
+});
+
+// -------- USUÁRIOS ----------
 servidorBackend.post('/criarUsuario', async (req, res) => {
-    const dados = req.body
-    const usuario = await criarUsuario(dados)
-    res.status(200).json(usuario)
-})
+  try {
+    const usuario = await criarUsuario(req.body);
+    res.status(200).json(usuario);
+  } catch (error) {
+    res.status(500).json({ error: handleError(error, 'Erro ao criar usuário') });
+  }
+});
 
 servidorBackend.get('/usuario/:username', async (req, res) => {
-    const { username } = req.params
-    const usuario = await coletarUsuarioPeloNome(username)
-    res.status(200).json(usuario)
-})
+  try {
+    const usuario = await coletarUsuarioPeloNome(req.params.username);
+    res.status(200).json(usuario);
+  } catch (error) {
+    res.status(500).json({ error: handleError(error, 'Erro ao coletar usuário') });
+  }
+});
 
 servidorBackend.get('/usuarios', async (req, res) => {
-    const usuarios = await coletarUsuarios()
-    res.status(200).json(usuarios)
-})
-
+  try {
+    const usuarios = await coletarUsuarios();
+    res.status(200).json(usuarios);
+  } catch (error) {
+    res.status(500).json({ error: handleError(error, 'Erro ao coletar usuários') });
+  }
+});
 
 servidorBackend.delete('/excluirUsuario/:username', async (req, res) => {
-    const { username } = req.params
-    const deletar = await excluirUsuario(username) 
-    res.status(200).json(deletar)
-})
+  try {
+    const resultado = await excluirUsuario(req.params.username);
+    res.status(200).json(resultado);
+  } catch (error) {
+    res.status(500).json({ error: handleError(error, 'Erro ao excluir usuário') });
+  }
+});
 
 servidorBackend.post('/uploadperfilimage', async (req, res) => {
-    const novosDados = req.body
-    console.log(novosDados)
-    const resultado = await uploadPerfilImage(novosDados)
-    res.json(resultado)
-})
+  try {
+    const resultado = await uploadPerfilImage(req.body);
+    res.status(200).json(resultado);
+  } catch (error) {
+    res.status(500).json({ error: handleError(error, 'Erro ao fazer upload da imagem de perfil') });
+  }
+});

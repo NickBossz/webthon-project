@@ -6,7 +6,9 @@ import PaginaInicial from './pages/paginainicial/PaginaInicial.js';
 import Menu from './pages/menu/Menu.js'
 import Dicas from './pages/dicas/Dicas.js'
 import SiteChecker from './pages/sitechecker/SiteChecker.js';
+import FileChecker from './pages/filechecker/FileChecker.js';
 import Perfil from './pages/perfil/Perfil.js';
+import CheckerApp from './pages/checkerapp/CheckerApp.js';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
           <Route path='/dicas' element={<Dicas />}></Route>
           <Route path='/siteChecker' element={<SiteChecker />}></Route>
           <Route path='/perfil/:username' element={<Perfil />}></Route>
+          <Route path='/fileChecker' element={<FileChecker />}></Route>
+          <Route path='/checkerApp' element={<CheckerApp />}></Route>
 
         </Routes>
       </div>

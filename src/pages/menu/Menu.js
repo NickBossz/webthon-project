@@ -43,6 +43,7 @@ const Menu = () => {
                 <Link to={'/'} className={styles.navLink}>INICIO</Link>
                 <Link to={'/dicas'} className={styles.navLink}>DICAS</Link>
                 <Link to={'/siteChecker'} className={styles.navLink}>SITE CHECKER</Link>
+                <Link to={'/fileChecker'} className={styles.navLink}>FILE CHECKER</Link>
                 {userType !== null && (
                     <Link to={'/perfil/' + userType.username} className={styles.navLink}>PERFIL</Link>
                 )}

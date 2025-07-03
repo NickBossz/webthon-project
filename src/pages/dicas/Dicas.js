@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Dicas.module.css';
 
 const modulesData = [
   {
+    id: 'senhas',
     title: 'Senhas Seguras',
     content: `
 • Use senhas longas e únicas para cada serviço.
@@ -11,6 +12,7 @@ const modulesData = [
 `,
   },
   {
+    id: 'phishing',
     title: 'Reconhecimento de Phishing',
     content: `
 • Desconfie de e-mails e links suspeitos.
@@ -19,6 +21,7 @@ const modulesData = [
 `,
   },
   {
+    id: 'vpn',
     title: 'Quando Usar VPN',
     content: `
 • Em redes Wi-Fi públicas para proteger seus dados.
@@ -26,26 +29,53 @@ const modulesData = [
 • Ao precisar de privacidade extra e anonimato online.
 `,
   },
-  
+  {
+    id: 'ameacas',
+    title: 'Tipos de Ameaças Digitais',
+    content: `
+• Malware: programas maliciosos que danificam ou controlam sistemas.
+• Ransomware: bloqueia acesso a arquivos e exige resgate.
+• Keyloggers: capturam tudo que você digita.
+• Engenharia social: manipulação psicológica para obter informações.
+• Spoofing: falsificação de identidade em e-mails ou sites.
+`,
+  },
+  {
+    id: 'glossario',
+    title: 'Glossário de Cibersegurança',
+    content: `
+• HTTPS: protocolo seguro para sites.
+• 2FA: autenticação de dois fatores, adiciona uma camada de segurança.
+• Firewall: barreira entre seu dispositivo e a internet para filtrar acessos.
+• Criptografia: técnica de codificação de dados.
+• IP Spoofing: falsificação de endereço IP para enganar sistemas.
+`,
+  },
 ];
 
 export default function Dicas() {
+  const [activeModule, setActiveModule] = useState(modulesData[0]);
+
   return (
-    <div className={styles.container}>
-      <div className={styles.moduleWrapper}>
-{modulesData.map((mod, idx) => (
-  <div
-    key={idx}
-    className={styles.module}
-    style={{ animationDelay: `${idx * 0.2}s` }}
-  >
-    <h2 className={styles.title}>{mod.title}</h2>
-    <p className={styles.text}>{mod.content}</p>
-  </div>
-))}
+    <div className={styles.containerGrid}>
+      <aside className={styles.sidebar}>
+        {modulesData.map((mod) => (
+          <button
+            key={mod.id}
+            className={`${styles.sidebarButton} ${activeModule.id === mod.id ? styles.active : ''}`}
+            onClick={() => setActiveModule(mod)}
+          >
+            {mod.title}
+          </button>
+        ))}
+      </aside>
 
-
-      </div>
+      <main className={styles.moduleArea}>
+        <div className={styles.module}>
+          <h2 className={styles.title}>{activeModule.title}</h2>
+          <p className={styles.text}>{activeModule.content}</p>
+        </div>
+      </main>
     </div>
   );
 }

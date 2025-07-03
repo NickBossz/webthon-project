@@ -1,29 +1,76 @@
-/* SecurityModules.module.css */
-.container {
+.containerGrid {
+  display: flex;
   min-height: 100vh;
+  background: #000;
+  color: #00cc00;
+  font-family: 'Courier New', monospace;
+  flex-direction: row;
+}
+
+/* Menu lateral */
+.sidebar {
+  width: 240px;
+  background: #0a0a0a;
+  border-right: 1px solid #007700;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Botões do menu lateral */
+.sidebarButton {
+  background: #000;
+  color: #00cc00;
+  border: 1px solid #005500;
+  border-radius: 6px;
+  padding: 0.7rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  text-align: left;
+  transition: background 0.2s, transform 0.2s, border-color 0.2s;
+}
+
+.sidebarButton:hover {
+  background: #002200;
+  transform: translateY(-1px);
+  border-color: #00cc00;
+}
+
+/* Botão ativo */
+.active {
+  background: #003300;
+  border-color: #00cc00;
+  font-weight: bold;
+  color: #00ff88;
+}
+
+/* Área principal de conteúdo */
+.moduleArea {
+  flex: 1;
+  padding: 3rem 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Bloco de conteúdo selecionado */
+.module {
+  max-width: 800px;
   width: 100%;
-  background: black;
-  display: grid;
-  place-items: center;
+  background: #101010;
+  border: 1px solid #006600;
+  border-radius: 0.75rem;
   padding: 2rem;
-  box-sizing: border-box;
-  animation: fadeIn 1s ease-in;
+  animation: fadeUp 0.6s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
 }
-
-
-.moduleWrapper {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  width: 100%;
-  max-width: 1200px;
-}
-
 
 @keyframes fadeUp {
   0% {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   100% {
     opacity: 1;
@@ -31,81 +78,50 @@
   }
 }
 
-
-.module {
-  background: rgba(0, 255, 0, 0.05);
-  border: 2px solid #00ff00;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  position: relative;
-  overflow: hidden;
-  z-index: 0;
-
-  /* Animação de entrada */
-  opacity: 0;
-  transform: translateY(30px); /* posição inicial para caso o JS não carregue rápido */
-  animation: fadeUp 0.8s ease-out forwards;
-  will-change: transform, opacity;
-  transition: transform 0.3s ease;
-}
-
-.module:hover {
-  transform: translateY(-5px) scale(1.02);
-}
-
-
-.module::before {
-  content: "";
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(
-    0deg,
-    transparent 0%,
-    #00ff00 50%,
-    transparent 100%
-  );
-  border-radius: inherit;
-  z-index: 2;
-  animation: borderGlow 2s linear infinite;
-  background-size: 400% 400%;
-  pointer-events: none;
-  mask: 
-    linear-gradient(#fff 0 0) content-box, 
-    linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  -webkit-mask-composite: destination-out;
-  padding: 2px;
-  box-sizing: border-box;
-}
-
-@keyframes borderGlow {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 400% 50%;
-  }
-}
-
+/* Título */
 .title {
   margin-bottom: 1rem;
-  font-family: 'Courier New', monospace;
-  font-size: 1.5rem;
-  color: #00ff00;
-  text-shadow:
-    0 0 5px #00ff00,
-    0 0 10px #00ff00;
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #00cc00;
+  word-break: break-word;
+  line-height: 1.4;
+  border-bottom: 1px dashed #006600;
+  padding-bottom: 0.5rem;
 }
 
+/* Texto do conteúdo */
 .text {
-  font-family: 'Courier New', monospace;
-  font-size: 1rem;
-  color: #00ff00;
+  font-size: 1.05rem;
+  color: #ccffcc;
   white-space: pre-line;
-  line-height: 1.4;
-  position: relative;
-  z-index: 1;
+  line-height: 1.7;
+  padding-top: 0.5rem;
+  word-wrap: break-word;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .containerGrid {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #007700;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .sidebarButton {
+    flex: 1 1 45%;
+    text-align: center;
+    margin: 0.3rem 0;
+  }
+
+  .moduleArea {
+    padding: 2rem 1rem;
+  }
 }

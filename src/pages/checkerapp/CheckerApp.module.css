@@ -1,0 +1,465 @@
+
+/* Container geral */
+.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  color: #00cc00;
+  font-family: 'Courier New', monospace;
+}
+
+/* Nav dos botões de troca */
+.navTabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.tabButton {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #004400;
+  background: transparent;
+  color: #00cc00;
+  cursor: pointer;
+  font-weight: normal;
+  transition: background 0.3s, border 0.3s, font-weight 0.3s;
+}
+
+.tabButtonActive {
+  border: 2px solid #00cc00;
+  background: #003300;
+  font-weight: bold;
+}
+
+/* =================== */
+/* FileChecker Styles */
+/* =================== */
+
+.fileContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem; /* Aumentar o padding */
+  background-color: #0a0a0a;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  border-radius: 12px;
+  box-shadow: 0 0 15px #00ff0055;
+  animation: fadeUp 0.8s ease-out forwards; /* Adicionando a animação */
+  opacity: 0; /* Inicialmente invisível */
+  transform: translateY(30px); /* Deslocar para baixo */
+  will-change: transform, opacity; /* Melhorar performance */
+}
+
+.fileTitle {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  text-shadow: 0 0 10px #00ff00;
+}
+
+.fileForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Aumentar o gap entre os elementos do formulário */
+  margin-bottom: 1.5rem;
+}
+
+.fileInput {
+  padding: 0.6rem;
+  background-color: #111;
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  border-radius: 6px;
+}
+
+.fileButton {
+  padding: 0.6rem 1.2rem;
+  background: transparent;
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+}
+
+.fileButton:hover:not(:disabled) {
+  background-color: rgba(0, 255, 0, 0.1);
+}
+
+.fileButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fileError {
+  color: #ff4c4c;
+  text-align: center;
+}
+
+.fileLoading {
+  color: yellow;
+  text-align: center;
+}
+
+.resultCard {
+  display: flex;
+  background-color: #111;
+  border: 1px solid #00ff00;
+  border-radius: 12px;
+  padding: 1.5rem; /* Aumentar o padding do card de resultado */
+  gap: 1rem;
+  box-shadow: 0 0 12px #00ff00aa;
+  flex-wrap: wrap;
+}
+
+.scoreSection {
+  flex: 0 0 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid #00ff00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.score {
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.outOf {
+  font-size: 0.8rem;
+}
+
+.label {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #00cc00;
+}
+
+.detailsSection {
+  flex: 1;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.success {
+  color: #00cc66;
+  font-weight: bold;
+}
+
+.actions button {
+  background: none;
+  border: none;
+  color: #00ff00;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  transition: 0.2s;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+}
+
+.actions button:hover {
+  text-decoration: underline;
+}
+
+.hash {
+  font-size: 0.9rem;
+  word-break: break-all;
+  margin: 0.5rem 0;
+  color: #88ff88;
+}
+
+.filename {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.tags span {
+  background-color: #003300;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid #00ff00;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+.metaInfo {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  color: #99ff99;
+}
+
+.link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: #00ffff;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* =================== */
+/* SiteChecker Styles */
+/* =================== */
+/* ====== Container e layout iguais ao FileChecker ====== */
+
+.siteContainer {
+  max-width: 800px;
+  margin: 0 auto 2rem auto;
+  padding: 2rem; /* Aumentar o padding */
+  background-color: #0a0a0a;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  border-radius: 12px;
+  box-shadow: 0 0 15px #00ff0055;
+  animation: fadeUp 0.8s ease-out forwards; /* Adicionando a animação */
+  opacity: 0; /* Inicialmente invisível */
+  transform: translateY(30px); /* Deslocar para baixo */
+  will-change: transform, opacity; /* Melhorar performance */
+}
+
+/* Título igual do FileChecker */
+.siteTitle {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  text-shadow: 0 0 10px #00ff00;
+}
+
+/* Formulário igual estrutura FileChecker */
+.siteForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Aumentar o gap entre os elementos do formulário */
+}
+
+/* Input estilo como FileChecker fileInput */
+.siteInput {
+  padding: 0.6rem;
+  background-color: #111;
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+}
+
+/* Botão igual FileChecker fileButton */
+.siteButton {
+  padding: 0.6rem 1.2rem;
+  background: transparent;
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+}
+
+.siteButton:hover:not(:disabled) {
+  background-color: rgba(0, 255, 0, 0.1);
+}
+
+.siteButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Texto de status com espaçamento e cor semelhante */
+.statusText {
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  color: #ccffcc;
+  white-space: pre-line;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Modal com borda verde, fundo escuro e sombra */
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  cursor: pointer;
+}
+
+.modalContent {
+  background: #0a0a0a;
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  box-sizing: border-box;
+  border: 2px solid #00ff00;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  cursor: default;
+  box-shadow: 0 0 25px #00ff00;
+  text-align: left;
+  position: relative;
+}
+
+.modalContent h3 {
+  margin-bottom: 1rem;
+}
+
+.modalContent p {
+  margin-bottom: 1rem;
+}
+
+/* Botão modal igual ao siteButton */
+.modalContent button {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+/* Cores para os textos explicativos dentro do modal */
+.safe {
+  font-weight: bold;
+  color: #22c55e;
+}
+
+.suspicious {
+  font-weight: bold;
+  color: #eab308;
+}
+
+.potentiallyDangerous {
+  font-weight: bold;
+  color: #f97316;
+}
+
+.dangerous {
+  font-weight: bold;
+  color: #dc2626;
+}
+
+/* Animação fadeUp reutilizada do FileChecker */
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.forumSection {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #111;
+  border: 1px solid #00ff00;
+  border-radius: 12px;
+  box-shadow: 0 0 12px #00ff00aa;
+}
+
+.forumTitle {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  text-shadow: 0 0 8px #00ff00;
+}
+
+.forumPost {
+  border-bottom: 1px solid #00ff0033;
+  padding: 1rem 0;
+}
+
+.forumPost:last-child {
+  border-bottom: none;
+}
+
+.forumHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.forumUsername {
+  font-weight: bold;
+  color: #00cc00;
+}
+
+.forumDate {
+  font-size: 0.8rem;
+  color: #99ff99;
+}
+
+.forumContent {
+  font-size: 0.9rem;
+  color: #ccffcc;
+  margin: 0.5rem 0;
+}
+
+.forumRating span {
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  border: 1px solid #00ff00;
+}
+
+.ratingPositive {
+  background-color: #003300;
+  color: #22c55e;
+}
+
+.ratingNegative {
+  background-color: #330000;
+  color: #dc2626;
+}
+
+.ratingWarning {
+  background-color: #332200;
+  color: #eab308;
+}
+
+.noPosts {
+  color: #99ff99;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* Update existing siteLoading to match fileLoading */
+.siteLoading {
+  color: yellow;
+  text-align: center;
+} 
