@@ -1,70 +1,200 @@
-# Getting Started with Create React App
+# 🛡️ BE SAFE - Plataforma de Segurança Digital
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![React](https://img.shields.io/badge/React-18.0.0-blue.svg)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-16.0.0-green.svg)](https://nodejs.org/)
+[![Python](https://img.shields.io/badge/Python-3.8+-yellow.svg)](https://python.org/)
+[![License](https://img.shields.io/badge/License-MIT-red.svg)](LICENSE)
 
-## Available Scripts
+Uma plataforma completa de segurança digital com tema hacker, oferecendo verificação de URLs, análise de arquivos, fórum de discussão e dicas de segurança.
 
-In the project directory, you can run:
+## 🚀 Funcionalidades
 
-### `npm start`
+### 🔍 **Checker App**
+- **Verificação de URLs**: Análise de segurança usando VirusTotal e IA
+- **Verificação de Arquivos**: Detecção de malware com sistema de score inteligente
+- **Interface Moderna**: Drag & drop para upload de arquivos
+- **Resultados Detalhados**: Relatórios completos com explicações
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 💬 **Fórum de Segurança**
+- **Avaliação de Sites**: Sistema de categorias (Positiva, Negativa, Aviso)
+- **Filtros Avançados**: Busca por site, categoria e ordenação
+- **Sistema de Votos**: Like/Dislike nas publicações
+- **Interface Responsiva**: Funciona perfeitamente em mobile
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 💡 **Dicas de Segurança**
+- **Conteúdo Educativo**: Dicas práticas de segurança digital
+- **Interface Interativa**: Design moderno e intuitivo
+- **Categorização**: Organização por temas de segurança
 
-### `npm test`
+### 👤 **Sistema de Usuários**
+- **Registro e Login**: Sistema completo de autenticação
+- **Perfis Personalizados**: Upload de foto de perfil
+- **Histórico de Atividades**: Posts e interações do usuário
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🛠️ Tecnologias Utilizadas
 
-### `npm run build`
+### **Frontend**
+- **React 18** - Framework principal
+- **Framer Motion** - Animações suaves
+- **React Router** - Navegação
+- **React Hot Toast** - Notificações
+- **Lucide React** - Ícones modernos
+- **CSS Modules** - Estilização modular
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### **Backend**
+- **Node.js** - Servidor JavaScript
+- **Express.js** - Framework web
+- **SQLite** - Banco de dados
+- **Sequelize** - ORM
+- **Python** - Scripts de análise
+- **VirusTotal API** - Verificação de segurança
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### **APIs Externas**
+- **VirusTotal** - Análise de URLs e arquivos
+- **Machine Learning** - Predição de risco
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 📦 Instalação
 
-### `npm run eject`
+### Pré-requisitos
+- Node.js 16+ 
+- Python 3.8+
+- npm ou yarn
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 1. Clone o repositório
+```bash
+git clone https://github.com/seu-usuario/be-safe.git
+cd be-safe
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 2. Instale as dependências do Frontend
+```bash
+npm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 3. Instale as dependências do Backend
+```bash
+cd backEnd
+npm install
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 4. Configure as variáveis de ambiente
+Crie um arquivo `.env` na raiz do projeto:
+```env
+VIRUSTOTAL_API_KEY=sua_chave_api_aqui
+```
 
-## Learn More
+### 5. Execute o projeto
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**Terminal 1 - Backend:**
+```bash
+cd backEnd
+node servidor.js
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**Terminal 2 - Frontend:**
+```bash
+npm start
+```
 
-### Code Splitting
+O projeto estará disponível em `http://localhost:3000`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 🎨 Características do Design
 
-### Analyzing the Bundle Size
+### **Tema Hacker**
+- **Cores Neon**: Verde (#00ff00), Ciano (#00ffff), Magenta (#ff00ff)
+- **Tipografia**: Courier New para efeito terminal
+- **Efeitos Visuais**: Scanlines, partículas, gradientes
+- **Animações**: Transições suaves e responsivas
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### **Interface Responsiva**
+- **Desktop**: Layout completo com sidebar
+- **Tablet**: Adaptação automática
+- **Mobile**: Menu hambúrguer e layout otimizado
 
-### Making a Progressive Web App
+## 🔧 Estrutura do Projeto
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```
+webthon/
+├── src/                          # Frontend React
+│   ├── pages/                    # Componentes de páginas
+│   │   ├── checkerapp/           # Verificador de URLs/Arquivos
+│   │   ├── forum/                # Fórum de discussão
+│   │   ├── dicas/                # Dicas de segurança
+│   │   ├── perfil/               # Perfil do usuário
+│   │   ├── login/                # Sistema de login
+│   │   └── menu/                 # Menu de navegação
+│   ├── App.js                    # Componente principal
+│   └── UserTypeContext.js        # Contexto de usuário
+├── backEnd/                      # Backend Node.js
+│   ├── CRUDS/                    # Operações de banco
+│   │   ├── CrudPosts.js          # CRUD de posts
+│   │   └── CrudUsuarios.js       # CRUD de usuários
+│   ├── servidor.js               # Servidor principal
+│   └── SiteChecker.py            # Script Python
+├── public/                       # Arquivos estáticos
+└── README.md                     # Este arquivo
+```
 
-### Advanced Configuration
+## 🚀 Como Usar
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### **Verificação de URLs**
+1. Acesse o "Checker App"
+2. Selecione "Verificar URL"
+3. Cole a URL suspeita
+4. Aguarde a análise
+5. Veja o relatório detalhado
 
-### Deployment
+### **Verificação de Arquivos**
+1. Acesse o "Checker App"
+2. Selecione "Verificar Arquivo"
+3. Arraste e solte o arquivo (máx. 50MB)
+4. Aguarde a análise no VirusTotal
+5. Veja o score de segurança
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### **Fórum**
+1. Acesse o "Fórum"
+2. Use os filtros para encontrar posts
+3. Crie uma nova publicação
+4. Vote nas publicações dos outros
 
-### `npm run build` fails to minify
+## 🔒 Segurança
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **Validação de Entrada**: Todos os dados são validados
+- **Sanitização**: Proteção contra XSS e injeção
+- **Rate Limiting**: Proteção contra spam
+- **HTTPS**: Recomendado para produção
+
+## 🤝 Contribuindo
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## 👨‍💻 Autor
+
+**Seu Nome**
+- GitHub: [@seu-usuario](https://github.com/seu-usuario)
+- LinkedIn: [Seu LinkedIn](https://linkedin.com/in/seu-perfil)
+
+## 🙏 Agradecimentos
+
+- **VirusTotal** pela API de análise de segurança
+- **React Team** pelo framework incrível
+- **Comunidade Open Source** por todas as bibliotecas utilizadas
+
+## 📊 Status do Projeto
+
+![GitHub last commit](https://img.shields.io/github/last-commit/seu-usuario/be-safe)
+![GitHub issues](https://img.shields.io/github/issues/seu-usuario/be-safe)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/seu-usuario/be-safe)
+![GitHub stars](https://img.shields.io/github/stars/seu-usuario/be-safe)
+
+---
+
+⭐ **Se este projeto te ajudou, considere dar uma estrela!**
