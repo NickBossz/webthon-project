@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import styles from '../Auth.module.css'
 import axios from 'axios'
 import { useUserType } from '../../UserTypeContext.js'
-import { useNotification } from '../NotificationManager.js'
+import { useNotifications } from '../NotificationManager.js'
 
 function Registrar({ closeModal, onLoginClick }) {
     const [usuario, setUsuario] = useState('')
     const [senha, setSenha] = useState('')
     const { setUserType } = useUserType()
-    const notify = useNotification()
+    const { addNotification } = useNotifications()
 
     async function criarUsuario() {
         
@@ -52,12 +52,12 @@ function Registrar({ closeModal, onLoginClick }) {
                 setUserType(response.data.dados)
                 window.history.pushState({}, '', '/')
                 window.location.reload()
-                notify("Logado com sucesso!", "#0080ff")
+                addNotification("Logado com sucesso!", "success")
             } else {
-                notify("Erro ao buscar usuário!", "#cc0000")
+                addNotification("Erro ao buscar usuário!", "error")
             }
         } catch (e) {
-            notify("Erro ao contatar servidor.", "#cc0000")
+            addNotification("Erro ao contatar servidor.", "error")
         }
     }
 

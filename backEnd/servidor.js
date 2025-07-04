@@ -27,6 +27,9 @@ const {
   coletarUsuarios
 } = require("./CRUDS/CrudUsuarios.js");
 
+const { criarPost, listarPosts, atualizarPost, excluirPost, votarPost } = require('./CRUDS/CrudPosts.js');
+
+
 // Função auxiliar para extrair domínio de URL
 function extrairDominio(urlString) {
   try {
@@ -145,7 +148,6 @@ servidorBackend.post("/check-file", async (req, res) => {
 
     // Calcula o hash SHA256
     const fileHash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
-    console.log('SHA256 do arquivo enviado:', fileHash);
 
     try {
       // Envia o arquivo para o VirusTotal
@@ -204,7 +206,6 @@ servidorBackend.post("/check-file", async (req, res) => {
         attempts++;
       } while (analysisResult.data.data?.attributes?.status !== 'completed');
 
-      console.log('Resposta da análise:', JSON.stringify(analysisResult.data, null, 2));
 
       const resultData = analysisResult.data.data;
       const stats = resultData.attributes?.stats;
@@ -285,5 +286,73 @@ servidorBackend.post('/uploadperfilimage', async (req, res) => {
     res.status(200).json(resultado);
   } catch (error) {
     res.status(500).json({ error: handleError(error, 'Erro ao fazer upload da imagem de perfil') });
+  }
+});
+
+servidorBackend.get('/posts', async (req, res) => {
+  const filtro = req.query.site || '';
+  const resultado = await listarPosts(filtro);
+  if (resultado.dados instanceof Error) return res.status(500).json({ error: resultado.mensagem });
+  res.json(resultado.dados);
+});
+
+servidorBackend.post('/posts', async (req, res) => {
+  const dados = req.body;
+  // Verifica se usuario enviou username autor
+  if (!dados.authorUsername) return res.status(400).json({ error: 'Usuário não autenticado' });
+  const resultado = await criarPost(dados);
+  if (resultado.dados instanceof Error) return res.status(500).json({ error: resultado.mensagem });
+  res.status(201).json(resultado.dados);
+});
+
+servidorBackend.put('/posts/:id', async (req, res) => {
+  const id = req.params.id;
+  const dados = req.body;
+  const usuarioAtual = req.body.authorUsername;
+  if (!usuarioAtual) return res.status(400).json({ error: 'Usuário não autenticado' });
+
+  const resultado = await atualizarPost(id, dados, usuarioAtual);
+  if (resultado.dados instanceof Error) return res.status(403).json({ error: resultado.mensagem });
+  res.json(resultado.dados);
+});
+
+servidorBackend.delete('/posts/:id', async (req, res) => {
+  const id = req.params.id;
+  const usuarioAtual = req.body.authorUsername;
+  if (!usuarioAtual) return res.status(400).json({ error: 'Usuário não autenticado' });
+
+  const resultado = await excluirPost(id, usuarioAtual);
+  if (resultado.dados instanceof Error) return res.status(403).json({ error: resultado.mensagem });
+  res.json({ mensagem: resultado.mensagem });
+});
+
+servidorBackend.post('/posts/:id/vote', async (req, res) => {
+  const id = req.params.id;
+  const { authorUsername, type } = req.body; // type = 'like' ou 'dislike'
+  if (!authorUsername) return res.status(400).json({ error: 'Usuário não autenticado' });
+  if (!['like', 'dislike'].includes(type)) return res.status(400).json({ error: 'Tipo inválido' });
+
+  const resultado = await votarPost(id, authorUsername, type);
+  if (resultado.dados instanceof Error) return res.status(400).json({ error: resultado.mensagem });
+  res.json(resultado.dados);
+});
+
+// Retorna posts do usuário pelo username autor
+servidorBackend.get('/forum/posts/:username', async (req, res) => {
+  const username = req.params.username;
+  if (!username) return res.status(400).json({ error: 'Usuário não fornecido' });
+
+  try {
+    const resultado = await listarPosts(); // busca todos
+    if (resultado.dados instanceof Error) {
+      return res.status(500).json({ error: resultado.mensagem });
+    }
+    // Filtra somente posts do usuário
+    const userPosts = resultado.dados.filter(post => post.authorUsername === username);
+
+    res.json({ posts: userPosts });
+  } catch (error) {
+    console.error('Erro ao buscar posts do usuário:', error);
+    res.status(500).json({ error: 'Erro ao buscar posts do usuário' });
   }
 });

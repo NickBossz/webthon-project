@@ -1,96 +1,221 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { Shield, Lock, Eye, Zap, ArrowRight, BookOpen } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import styles from './PaginaInicial.module.css';
 
-function PaginaInicial() {
-  const containerRef = useRef();
-  const fullText = 'CONSCIENTIZAÇÃO DIGITAL';
-  const [displayedText, setDisplayedText] = useState('');
-  const [isTypingNow, setIsTypingNow] = useState(false); // <- controle do cursor
+const PaginaInicial = () => {
+    const navigate = useNavigate();
+    const containerRef = useRef(null);
+    const { scrollYProgress } = useScroll();
+    const titleRef = useRef(null);
+    const isTitleInView = useInView(titleRef, { once: true });
 
-  useEffect(() => {
-    const container = containerRef.current;
-    const binary = ['0', '1'];
-    const columns = 40;
-    const drops = [];
+    // Parallax effects simplificados
+    const y1 = useTransform(scrollYProgress, [0, 1], [0, -50]);
+    const y2 = useTransform(scrollYProgress, [0, 1], [0, -25]);
 
-    for (let i = 0; i < columns; i++) {
-      const column = document.createElement('div');
-      column.className = styles.column;
-
-      const depth = Math.random();
-      const fontSize = 14 + depth * 20;
-      const opacity = 0.3 + depth * 0.7;
-      const speed = 8 - depth * 2;
-
-      column.style.left = `${(i / columns) * 100 * 2.5}vw`;
-      column.style.fontSize = `${fontSize}px`;
-      column.style.opacity = opacity;
-      column.style.animationDuration = `${speed}s`;
-
-      const length = Math.floor(Math.random() * 15 + 10);
-      for (let j = 0; j < length; j++) {
-        const span = document.createElement('span');
-        span.className = styles.char;
-        span.textContent = binary[Math.floor(Math.random() * 2)];
-        span.style.animationDelay = `${Math.random() * 2}s`;
-        column.appendChild(span);
-      }
-
-      container.appendChild(column);
-      drops.push(column);
-    }
-
-    return () => {
-      drops.forEach(column => column.remove());
-    };
-  }, []);
-
-  useEffect(() => {
-    let currentIndex = 0;
-    let isTyping = true;
-    let timeoutId;
-
-    const step = () => {
-      if (isTyping) {
-        setIsTypingNow(true); // começou a digitar
-        setDisplayedText(fullText.slice(0, currentIndex + 1));
-        currentIndex++;
-
-        if (currentIndex === fullText.length) {
-          isTyping = false;
-          setIsTypingNow(false); // terminou de digitar
-          timeoutId = setTimeout(step, 3000); // pausa maior antes de apagar
-        } else {
-          timeoutId = setTimeout(step, 120);
+    const features = [
+        {
+            icon: Shield,
+            title: "PROTEÇÃO AVANÇADA",
+            description: "Sistemas de segurança de última geração para proteger seus dados"
+        },
+        {
+            icon: Lock,
+            title: "CRIPTOGRAFIA",
+            description: "Criptografia de ponta para manter suas informações seguras"
+        },
+        {
+            icon: Eye,
+            title: "MONITORAMENTO",
+            description: "Monitoramento em tempo real de ameaças cibernéticas"
+        },
+        {
+            icon: Zap,
+            title: "RESPOSTA RÁPIDA",
+            description: "Resposta imediata a qualquer tentativa de invasão"
         }
-      } else {
-        setIsTypingNow(false); // apagando, piscar ativado
-        setDisplayedText(fullText.slice(0, currentIndex - 1));
-        currentIndex--;
+    ];
 
-        if (currentIndex === 0) {
-          isTyping = true;
-          timeoutId = setTimeout(step, 1000); // pausa antes de recomeçar a digitar
-        } else {
-          timeoutId = setTimeout(step, 80);
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                duration: 0.3,
+                staggerChildren: 0.05
+            }
         }
-      }
     };
 
-    step();
+    const itemVariants = {
+        hidden: { opacity: 0, y: 10 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.3,
+                ease: "easeOut"
+            }
+        }
+    };
 
-    return () => clearTimeout(timeoutId);
-  }, []);
+    const titleVariants = {
+        hidden: { opacity: 0, y: -10 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.4,
+                ease: "easeOut"
+            }
+        }
+    };
 
-  return (
-    <>
-      <div className={styles.container} ref={containerRef}></div>
-      <div className={styles.centeredText}>
-        {displayedText}
-        <span className={`${styles.cursor} ${isTypingNow ? styles.staticCursor : ''}`}>|</span>
-      </div>
-    </>
-  );
-}
+    const handleDicasClick = () => {
+        navigate('/dicas');
+    };
 
-export default PaginaInicial;
+    return (
+        <div className={styles.container} ref={containerRef}>
+            {/* Main Content */}
+            <motion.div
+                className={styles.content}
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+            >
+                {/* Hero Section */}
+                <motion.section className={styles.heroSection}>
+                    <motion.div
+                        ref={titleRef}
+                        className={styles.heroContent}
+                        variants={titleVariants}
+                    >
+                        <motion.h1 
+                            className={styles.mainTitle}
+                            animate={isTitleInView ? {
+                                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
+                            } : {}}
+                            transition={{
+                                duration: 6,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                            }}
+                        >
+                            BE SAFE
+                        </motion.h1>
+                        
+                        <motion.p 
+                            className={styles.subtitle}
+                            variants={itemVariants}
+                        >
+                            Sua segurança digital é nossa prioridade
+                        </motion.p>
+                        
+                        <motion.div
+                            className={styles.ctaSection}
+                            variants={itemVariants}
+                        >
+                            <motion.button
+                                className={styles.ctaButton}
+                                onClick={handleDicasClick}
+                                whileHover={{ 
+                                    scale: 1.01,
+                                    boxShadow: "0 0 15px rgba(0, 255, 0, 0.4)"
+                                }}
+                                whileTap={{ scale: 0.99 }}
+                            >
+                                <BookOpen size={20} />
+                                <span>VEJA ALGUMAS DICAS</span>
+                                <ArrowRight size={20} />
+                            </motion.button>
+                        </motion.div>
+                    </motion.div>
+                </motion.section>
+
+                {/* Features Section */}
+                <motion.section 
+                    className={styles.featuresSection}
+                    style={{ y: y1 }}
+                >
+                    <motion.h2 
+                        className={styles.sectionTitle}
+                        variants={itemVariants}
+                    >
+                        RECURSOS DE SEGURANÇA
+                    </motion.h2>
+                    
+                    <motion.div 
+                        className={styles.featuresGrid}
+                        variants={containerVariants}
+                    >
+                        {features.map((feature, index) => {
+                            const Icon = feature.icon;
+                            return (
+                                <motion.div
+                                    key={index}
+                                    className={styles.featureCard}
+                                    variants={itemVariants}
+                                    whileHover={{ 
+                                        scale: 1.01,
+                                        y: -2,
+                                        boxShadow: "0 3px 15px rgba(0, 255, 0, 0.15)"
+                                    }}
+                                >
+                                    <div className={styles.featureIcon}>
+                                        <Icon size={40} />
+                                    </div>
+                                    <h3 className={styles.featureTitle}>{feature.title}</h3>
+                                    <p className={styles.featureDescription}>{feature.description}</p>
+                                </motion.div>
+                            );
+                        })}
+                    </motion.div>
+                </motion.section>
+
+                {/* Stats Section */}
+                <motion.section 
+                    className={styles.statsSection}
+                    style={{ y: y2 }}
+                >
+                    <motion.div 
+                        className={styles.statsGrid}
+                        variants={containerVariants}
+                    >
+                        {[
+                            { number: "99.9%", label: "Taxa de Proteção" },
+                            { number: "24/7", label: "Monitoramento" },
+                            { number: "1M+", label: "Usuários Protegidos" },
+                            { number: "0", label: "Violações de Segurança" }
+                        ].map((stat, index) => (
+                            <motion.div
+                                key={index}
+                                className={styles.statCard}
+                                variants={itemVariants}
+                                whileHover={{ scale: 1.02 }}
+                            >
+                                <motion.div
+                                    className={styles.statNumber}
+                                    initial={{ scale: 0 }}
+                                    whileInView={{ scale: 1 }}
+                                    transition={{ 
+                                        type: "spring",
+                                        stiffness: 100,
+                                        delay: index * 0.02
+                                    }}
+                                >
+                                    {stat.number}
+                                </motion.div>
+                                <div className={styles.statLabel}>{stat.label}</div>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                </motion.section>
+            </motion.div>
+        </div>
+    );
+};
+
+export default PaginaInicial; 

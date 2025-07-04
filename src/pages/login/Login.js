@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import styles from '../Auth.module.css'
 import axios from 'axios'
 import { useUserType } from '../../UserTypeContext'
-import { useNotification } from '../NotificationManager'
+import { useNotifications } from '../NotificationManager'
 
 function Login({ closeModal, onRegisterClick }) {
     const [usuario, setUsuario] = useState('')
     const [senha, setSenha] = useState('')
     const { setUserType } = useUserType()
-    const notify = useNotification()
+    const { addNotification } = useNotifications()
 
     async function handleLogin() {
         if (!checarInputs()) return
@@ -19,12 +19,12 @@ function Login({ closeModal, onRegisterClick }) {
                 setUserType(response.data.dados)
                 window.history.pushState({}, '', '/')
                 window.location.reload()
-                notify("Logado com sucesso!", "#0080ff")
+                addNotification("Logado com sucesso!", "success")
             } else {
-                notify("A senha está incorreta!", "#cc0000")
+                addNotification("A senha está incorreta!", "error")
             }
         } catch (e) {
-            notify("Este usuário não existe!", "#cc0000")
+            addNotification("Este usuário não existe!", "error")
         }
     }
 

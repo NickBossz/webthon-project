@@ -1,9 +1,250 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #000000;
+  font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
+  background: linear-gradient(135deg, #000000 0%, #0a0a0a 50%, #000000 100%);
+  color: #00ff00;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Prevenir scroll quando modal está aberto */
+body.modal-open {
+  overflow: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(0, 255, 0, 0.01) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.01) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
 }
 
 section {
-  padding: 2rem;
+  padding: 1.5rem; /* Reduzido de 2rem */
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 6px; /* Reduzido de 8px */
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+  border: 1px solid #00ff00;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00ff00;
+  border-radius: 3px; /* Reduzido de 4px */
+  box-shadow: 0 0 3px #00ff00; /* Reduzido de 5px */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00cc00;
+  box-shadow: 0 0 5px #00cc00; /* Reduzido de 10px */
+}
+
+/* Seleção de texto */
+::selection {
+  background: #00ff00;
+  color: #000000;
+}
+
+::-moz-selection {
+  background: #00ff00;
+  color: #000000;
+}
+
+/* Efeitos globais para elementos interativos */
+* {
+  box-sizing: border-box;
+}
+
+/* Animações globais otimizadas */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 3px #00ff00, 0 0 6px #00ff00; /* Reduzido intensidade */
+  }
+  50% {
+    box-shadow: 0 0 6px #00ff00, 0 0 12px #00ff00; /* Reduzido intensidade */
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.9; /* Reduzido de 0.8 */
+  }
+}
+
+/* Efeito de scanline otimizado */
+.scanline {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px; /* Reduzido de 2px */
+  background: linear-gradient(90deg, transparent, #00ff00, transparent);
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.1; /* Reduzido de 0.2 */
+}
+
+/* Background particles otimizado */
+.background-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.particle {
+  position: absolute;
+  width: 1px; /* Reduzido de 2px */
+  height: 1px; /* Reduzido de 2px */
+  background: #00ff00;
+  border-radius: 50%;
+  box-shadow: 0 0 2px #00ff00; /* Reduzido de 3px */
+  opacity: 0;
+}
+
+/* Loading screen otimizado */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #000000 0%, #0a0a0a 50%, #000000 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.loading-content {
+  text-align: center;
+  color: #00ff00;
+}
+
+.loading-logo {
+  margin-bottom: 1.5rem; /* Reduzido de 2rem */
+}
+
+.logo-text {
+  font-size: 2.5rem; /* Reduzido de 3rem */
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.3rem; /* Reduzido de 0.5rem */
+  background: linear-gradient(45deg, #00ff00, #00ffff, #00ff00);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 4s ease-in-out infinite; /* Aumentado de 3s */
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.loading-bar {
+  width: 250px; /* Reduzido de 300px */
+  height: 3px; /* Reduzido de 4px */
+  background: rgba(0, 255, 0, 0.15); /* Reduzido de 0.2 */
+  border-radius: 2px;
+  margin: 0 auto 0.8rem; /* Reduzido de 1rem */
+  overflow: hidden;
+  position: relative;
+}
+
+.loading-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #00ff00, #00ffff, #00ff00);
+  border-radius: 2px;
+  box-shadow: 0 0 5px #00ff00; /* Reduzido de 10px */
+}
+
+.loading-text {
+  font-size: 0.9rem; /* Reduzido de 1rem */
+  color: #88ff88;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem; /* Reduzido de 0.2rem */
+}
+
+/* Toast customizations */
+.toast {
+  background: linear-gradient(135deg, #0a0a0a 0%, #111111 50%, #0a0a0a 100%) !important;
+  color: #00ff00 !important;
+  border: 1px solid #00ff00 !important; /* Reduzido de 2px */
+  border-radius: 8px !important; /* Reduzido de 10px */
+  font-family: 'Courier New', 'Consolas', 'Monaco', monospace !important;
+  font-weight: bold !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important; /* Reduzido de 1px */
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.4) !important; /* Reduzido intensidade */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .logo-text {
+    font-size: 2rem; /* Reduzido de 2.5rem */
+    letter-spacing: 0.2rem; /* Reduzido de 0.3rem */
+  }
+  
+  .loading-bar {
+    width: 200px; /* Reduzido de 250px */
+  }
+  
+  .loading-text {
+    font-size: 0.8rem; /* Reduzido de 0.9rem */
+    letter-spacing: 0.05rem; /* Reduzido de 0.1rem */
+  }
+}
+
+/* Performance optimizations */
+* {
+  will-change: auto;
+}
+
+.particle,
+.scanline {
+  will-change: transform;
+}
+
+/* Focus styles for accessibility */
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 1px solid #00ffff; /* Reduzido de 2px */
+  outline-offset: 1px; /* Reduzido de 2px */
+}
+
+/* Print styles */
+@media print {
+  .scanline,
+  .background-particles,
+  .loading-screen {
+    display: none !important;
+  }
 }

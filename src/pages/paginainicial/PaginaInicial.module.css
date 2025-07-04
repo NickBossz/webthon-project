@@ -1,79 +1,253 @@
 .container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: black;
-  overflow: hidden;
-  z-index: -1;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #000000 0%, #0a0a0a 50%, #000000 100%);
 }
 
-.column {
-  position: absolute;
-  top: -100vh;
-  color: #00ff00;
-  display: flex;
-  flex-direction: column;
-  font-family: monospace;
-  animation-name: fall;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
+.content {
+    position: relative;
+    z-index: 2;
+    padding: 80px 2rem 2rem;
 }
 
-.char {
-  text-shadow: 0 0 5px #00ff00;
-  line-height: 1.2;
+.heroSection {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    margin-bottom: 2rem;
 }
 
-@keyframes fall {
-  0% {
-    top: -100vh;
-  }
-  100% {
-    top: 100vh;
-  }
+.heroContent {
+    max-width: 800px;
 }
 
-/* ... mantém os estilos anteriores ... */
-
-.centeredText {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #00ff00;
-  font-family: 'Courier New', monospace;
-  font-size: 3rem;
-  letter-spacing: 0.15em;
-  text-shadow:
-    0 0 5px #00ff00,
-    0 0 10px #00ff00,
-    0 0 20px #00ff00,
-    0 0 40px #0f0;
-  white-space: nowrap;
-  user-select: none;
+.mainTitle {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #00ff00, #00ffff, #00ff00);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+    position: relative;
 }
 
-.cursor {
-  display: inline-block;
-  color: #00ff00;
-  text-shadow:
-    0 0 5px #00ff00,
-    0 0 10px #00ff00,
-    0 0 20px #00ff00,
-    0 0 40px #0f0;
-  animation: blink 1s step-start infinite;
+.subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    color: #88ff88;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    font-weight: 300;
 }
 
-.staticCursor {
-  animation: none !important;
+.ctaSection {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
+.ctaButton {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: linear-gradient(135deg, #00ff00, #00cc00);
+    color: #000;
+    border: none;
+    padding: 0.7rem 1.3rem;
+    border-radius: 35px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    transition: all 0.3s ease;
+}
 
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
+.ctaButton:hover {
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+    transform: translateY(-1px);
+}
+
+.featuresSection {
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+
+.sectionTitle {
+    text-align: center;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    margin-bottom: 1.5rem;
+    color: #00ff00;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.featuresGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.featureCard {
+    background: linear-gradient(135deg, rgba(0, 255, 0, 0.02) 0%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 255, 0, 0.02) 100%);
+    border: 1px solid #00ff00;
+    border-radius: 10px;
+    padding: 1.2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(3px);
+    position: relative;
+    overflow: hidden;
+}
+
+.featureCard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.03), transparent);
+    transition: left 0.5s ease;
+}
+
+.featureCard:hover::before {
+    left: 100%;
+}
+
+.featureIcon {
+    color: #00ff00;
+    margin-bottom: 0.8rem;
+    filter: drop-shadow(0 0 5px #00ff00);
+}
+
+.featureTitle {
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    margin-bottom: 0.6rem;
+    color: #00ff00;
+}
+
+.featureDescription {
+    color: #88ff88;
+    line-height: 1.4;
+    font-size: 0.85rem;
+}
+
+.statsSection {
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.statCard {
+    background: linear-gradient(135deg, rgba(0, 255, 0, 0.03) 0%, rgba(0, 0, 0, 0.9) 50%, rgba(0, 255, 0, 0.03) 100%);
+    border: 1px solid #00ff00;
+    border-radius: 10px;
+    padding: 1.2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(3px);
+}
+
+.statNumber {
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    font-weight: bold;
+    color: #00ff00;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.statLabel {
+    color: #88ff88;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    font-weight: 300;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .content {
+        padding: 60px 1rem 1rem;
+    }
+    
+    .heroSection {
+        min-height: 40vh;
+        margin-bottom: 1rem;
+    }
+    
+    .ctaSection {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .ctaButton {
+        width: 100%;
+        max-width: 250px;
+        justify-content: center;
+    }
+    
+    .featuresGrid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+        padding: 0 1rem;
+    }
+    
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+        padding: 0 1rem;
+    }
+    
+    .featureCard,
+    .statCard {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .mainTitle {
+        letter-spacing: 0.1rem;
+    }
+    
+    .subtitle {
+        letter-spacing: 0.02rem;
+    }
+    
+    .statsGrid {
+        grid-template-columns: 1fr;
+    }
+    
+    .featureCard,
+    .statCard {
+        padding: 0.8rem;
+    }
 }
 
