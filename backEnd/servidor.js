@@ -1,3 +1,6 @@
+// Carregar variáveis de ambiente
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const { spawn } = require('child_process');
@@ -9,9 +12,17 @@ const crypto = require('crypto');
 const fs = require('fs').promises;
 
 const servidorBackend = express();
-const PORT = 8080;
-const VIRUSTOTAL_API_KEY = process.env.VIRUSTOTAL_API_KEY || "ce7de855a44cd3422f5dc0a490744cb0a9869b83ba30963ee3e4e62158b5306a";
+const PORT = process.env.PORT || 8080;
+const VIRUSTOTAL_API_KEY = process.env.VIRUSTOTAL_API_KEY;
 const VIRUSTOTAL_BASE_URL = 'https://www.virustotal.com/api/v3';
+
+// Validar se a API key está configurada
+if (!VIRUSTOTAL_API_KEY) {
+  console.error('❌ ERRO: VIRUSTOTAL_API_KEY não está configurada no arquivo .env');
+  console.error('Por favor, configure a variável VIRUSTOTAL_API_KEY no arquivo .env');
+  process.exit(1);
+}
+
 const AXIOS_CONFIG = {
   headers: { 'x-apikey': VIRUSTOTAL_API_KEY },
   maxContentLength: Infinity,
@@ -99,7 +110,10 @@ servidorBackend.use(express.urlencoded({ extended: true, limit: '50mb' }));
 servidorBackend.use(cors({ origin: '*', allowedHeaders: '*' }));
 
 servidorBackend.listen(PORT, () => {
-  console.log(`servidor backend rodando em http://localhost:${PORT}`);
+  console.log('🚀 Servidor backend iniciado com sucesso!');
+  console.log(`📍 URL: http://localhost:${PORT}`);
+  console.log(`🔑 VirusTotal API: ${VIRUSTOTAL_API_KEY ? '✅ Configurada' : '❌ Não configurada'}`);
+  console.log('📁 Variáveis de ambiente carregadas do arquivo .env');
 });
 
 // -------- CHECK-SITE ----------
